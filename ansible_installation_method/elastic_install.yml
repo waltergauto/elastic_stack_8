@@ -1,0 +1,60 @@
+---
+- name: Elastic Stack 8.x
+  hosts: localhost
+  vars:
+    packages:
+      - elasticsearch
+      - logstash
+      - kibana
+      - filebeat
+      
+  tasks:
+     
+    - name: Import GPG Key
+      ansible.builtin.rpm_key:
+        key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+        state: present
+
+    - name: Configure repo
+      ansible.builtin.yum_repository:
+        name: elastic-stack
+        description: Elasticsearch repository for 8.x packages
+        file: elastic-stack
+        baseurl: https://artifacts.elastic.co/packages/8.x/yum
+        gpgcheck: true
+        enabled: true
+
+    - name: Install elastic stack
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - "{{ packages }}"
+
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: true
+
+    - name: Start and enable {{ packages[0] }}
+      ansible.builtin.service:
+        name: "{{ packages[0] }}"
+        state: started
+        enabled: true
+    
+    - name: Start and enable {{ packages[1] }}
+      ansible.builtin.service:
+        name: "{{ packages[1] }}"
+        state: started
+        enabled: true
+    
+    - name: Start and enable {{ packages[2] }}
+      ansible.builtin.service:
+        name: "{{ packages[2] }}"
+        state: started
+        enabled: true
+    
+    - name: Start and enable {{ packages[3] }}
+      ansible.builtin.service:
+        name: "{{ packages[3] }}"
+        state: started
+        enabled: true
