@@ -1,0 +1,14 @@
+Elasticsearch Commands
+________________________
+curl <IP>:9200/_cluster/health
+
+Binaries are located in /usr/share/elasticsearch/bin/
+
+Test initial installation
+curl -k -u elastic:password https://localhost:9200
+Reset password
+/usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
+
+Testing Kibana
+curl <IP>:5601
+
